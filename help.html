@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>聊天室</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/3.26.13/antd.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #f2f2f2;
+            background-image: url(https://c-ssl.duitang.com/uploads/blog/202106/10/20210610232324_4410b.jpeg);
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        #chatroom {
+            width: 500px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px #ccc;
+        }
+        #chatroom h1 {
+            text-align: center;
+            font-size: 20px;
+            margin: 0 0 10px 0;
+            padding: 0;
+        }
+        #chatroom .messages {
+            padding: 10px;
+            background-color: #f2f2f2;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        #chatroom .messages p {
+            margin: 0;
+            padding: 5px;
+        }
+        #chatroom .messages .user {
+            font-weight: bold;
+        }
+        #chatroom .input {
+            padding: 10px;
+            background-color: #f2f2f2;
+            border-radius: 5px;
+        }
+        #chatroom .input input {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        function send(){
+            text = $("#input_text").val()
+            console.log(text)
+            $("#click").html("发送中");
+            $("#click").css("background-color","red");
+            $(document).ready(function(){
+            $.ajax({
+                url: "https://api.openai.com/v1/completions",
+                data:JSON.stringify({
+                    model: "text-davinci-003",
+                    temperature: 0,
+                    max_tokens: 2048,
+                    prompt: text
+            }),
+                type:'POST',
+                beforeSend:function(xhr){
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+                    xhr.setRequestHeader('authorization', 'Bearer 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');
+                },
+                success: function(content){
+                    console.log(content)
+                    if (content.choices==null||content.choices.length==0||content.choices[0].text==''){
+                        $("#ans").html('我好像迷失在无边的网络中了，接口调用错误：');
+                    }else {
+                        str = content.choices[0].text.replace(/^\s+|\s+$/g,'');
+                        $("#ans").html(str);
+                    }
+                    $("#click").css("background-color",'');
+                    $("#click").html("发送");
+                }
+            })
+            });
+   
+        }
+    </script>
+        <title>聊天室</title>
+        <div id="chatroom">
+            <h1>聊天室</h1>
+            <div class="messages">
+                <p>cx：<span id="ans"></span>你好！</p>
+            </div>
+            <div class="input" style="display:flex">
+                <input id = "input_text" type="text" placeholder="输入消息..."><button id = "click" onclick="send()" style="width: 80px;margin-left: 30px;">发送</button>
+            </div>
+        </div>
+    
+</div>
+
+</body>
+</html>
