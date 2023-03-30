@@ -10,7 +10,7 @@
         body {
             font-family: sans-serif;
             background-color: #f2f2f2;
-            background-image: url(https://c-ssl.duitang.com/uploads/blog/202106/10/20210610232324_4410b.jpeg);
+            background-image: url(./123.jpeg);
             background-repeat: no-repeat;
             background-size: cover;
             display: flex;
@@ -79,7 +79,7 @@
             messages.push({role:"user",content:text})
             $(document).ready(function(){
             $.ajax({
-                url: "./123.jpeg",
+                url: "https://api.forchange.cn/",
                 data:JSON.stringify({
                     model: "gpt-3.5-turbo",
                     temperature: 0.7,
